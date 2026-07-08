@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강의일정 비서</title>
+    
+    <!-- SEO & Open Graph Meta Tags -->
+    <meta name="description" content="말로 일정 입력, 날짜별 일정 검색, 반복일정과 메모까지 가능한 강사용 일정관리 앱">
+    <meta property="og:title" content="강의일정 비서 - 전문강사를 위한 강의 일정 관리">
+    <meta property="og:description" content="말로 일정 입력, 날짜별 일정 검색, 반복일정과 메모까지 가능한 강사용 일정관리 앱">
+    <meta property="og:image" content="./og-image.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="강의일정 비서">
+    <meta name="twitter:description" content="말로 일정 입력, 날짜별 일정 검색, 반복일정과 메모까지 가능한 강사용 일정관리 앱">
+    <meta name="twitter:image" content="./og-image.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./favicon.png">
+    
+    <!-- Pretendard Font for Professional Aesthetics -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <h1 class="logo-text">강의 일정 비서</h1>
+            <div class="header-actions">
+                <span class="header-date" id="current-header-date">2026-07-08</span>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="app-main-content">
+            <!-- 1. TODAY TAB -->
+            <section id="tab-today" class="tab-pane active">
+                <div class="welcome-banner">
+                    <span class="user-badge">박소순강사님의 스마트 일정 관리</span>
+                    <h2>오늘도 멋진 강의를 응원합니다!</h2>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <!-- Today's Lecture Card -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>오늘의 강의</h3>
+                            <span class="count-badge" id="today-count">0</span>
+                        </div>
+                        <div class="lecture-list" id="today-lectures">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+
+                    <!-- Tomorrow's Lecture Card -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>내일의 강의</h3>
+                            <span class="count-badge" id="tomorrow-count">0</span>
+                        </div>
+                        <div class="lecture-list" id="tomorrow-lectures">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+
+                    <!-- This Week's Lecture Card -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>이번 주의 강의</h3>
+                            <span class="count-badge" id="week-count">0</span>
+                        </div>
+                        <div class="lecture-list" id="week-lectures">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Quick NLP Action Panel -->
+                <div class="quick-action-panel">
+                    <h3>간편 일정 등록 / 검색</h3>
+                    <div class="quick-input-group">
+                        <button class="btn btn-primary btn-large btn-voice" id="btn-quick-voice">
+                            <span class="icon">🎙️</span> 말로 입력 / 검색
+                        </button>
+                        <button class="btn btn-outline btn-large" id="btn-quick-text">
+                            <span class="icon">⌨️</span> 텍스트로 입력 / 검색
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. CALENDAR TAB -->
+            <section id="tab-calendar" class="tab-pane">
+                <div class="calendar-wrapper">
+                    <!-- Calendar Header -->
+                    <div class="calendar-nav">
+                        <button class="btn-cal-arrow" id="btn-prev-month">◀</button>
+                        <h2 class="calendar-title" id="calendar-month-year">2026년 7월</h2>
+                        <button class="btn-cal-arrow" id="btn-next-month">▶</button>
+                    </div>
+
+                    <!-- Calendar Body -->
+                    <div class="calendar-card">
+                        <div class="calendar-weekdays">
+                            <div class="weekday sun">일</div>
+                            <div class="weekday">월</div>
+                            <div class="weekday">화</div>
+                            <div class="weekday">수</div>
+                            <div class="weekday">목</div>
+                            <div class="weekday">금</div>
+                            <div class="weekday sat">토</div>
+                        </div>
+                        <div class="calendar-days" id="calendar-days-grid">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+
+                    <!-- Selected Day Lectures -->
+                    <div class="selected-day-container">
+                        <div class="selected-header">
+                            <h3 id="selected-date-title">2026년 7월 8일 강의 일정</h3>
+                            <button class="btn btn-text-only" id="btn-add-for-selected-date">+ 일정 추가</button>
+                        </div>
+                        <div class="lecture-list compact" id="selected-day-lectures">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. INPUT TAB -->
+            <section id="tab-input" class="tab-pane">
+                <div class="input-form-container">
+                    <div class="input-mode-header">
+                        <h2>새 일정 등록 & 반복 일정 만들기</h2>
+                    </div>
+
+                    <div class="nlp-input-card">
+                        <label for="nlp-text-input">말씀하시거나 텍스트로 자유롭게 입력하세요</label>
+                        <div class="textarea-wrapper">
+                            <textarea id="nlp-text-input" placeholder="예: '7월 15일 오후 2시 복지관 스마트폰 교육'\n또는 '7월 6일부터 매주 월요일 오후 3시부터 5시까지 영도 봉래센터 강의 15회 등록해줘'"></textarea>
+                            <button class="mic-floating-btn" id="btn-nlp-mic" title="음성 인식 시작/종료">
+                                <span class="mic-icon">🎙️</span>
+                            </button>
+                        </div>
+                        <div class="nlp-controls">
+                            <button class="btn btn-outline" id="btn-nlp-clear">지우기</button>
+                            <button class="btn btn-primary" id="btn-nlp-parse">일정 분석하기</button>
+                        </div>
+                        <div class="stt-status" id="stt-status-msg"></div>
+                    </div>
+
+                    <!-- Parsed Event Preview & Edit Form -->
+                    <div class="parsed-result-card hidden" id="parsed-result-card">
+                        <h3>일정 분석 결과</h3>
+                        <p class="parsed-helper-msg">아래 항목들이 정확한지 확인 후 저장해주세요.</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>강의명</label>
+                                <input type="text" id="event-title" placeholder="강의명을 입력하세요">
+                            </div>
+                            <div class="form-group">
+                                <label>장소</label>
+                                <input type="text" id="event-location" placeholder="장소를 입력하세요">
+                            </div>
+                            <div class="form-group">
+                                <label>날짜 / 시작일</label>
+                                <input type="date" id="event-date">
+                            </div>
+                            <div class="form-group-row">
+                                <div class="form-sub-group">
+                                    <label>시작 시간</label>
+                                    <input type="time" id="event-start-time">
+                                </div>
+                                <div class="form-sub-group">
+                                    <label>종료 시간</label>
+                                    <input type="time" id="event-end-time">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recurrence Config -->
+                        <div class="recurrence-toggle-area">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="enable-recurrence">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label font-bold">반복 일정으로 생성</span>
+                            </label>
+                        </div>
+
+                        <div class="recurrence-settings hidden" id="recurrence-settings-panel">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>반복 주기</label>
+                                    <select id="recurrence-type">
+                                        <option value="weekly">매주 반복</option>
+                                        <option value="biweekly">격주 반복</option>
+                                        <option value="monthly">매월 반복</option>
+                                        <option value="custom">직접 선택 (매주)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>총 회차 (수)</label>
+                                    <input type="number" id="recurrence-rounds" value="15" min="1" max="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn btn-outline" id="btn-cancel-save">취소</button>
+                            <button class="btn btn-primary" id="btn-confirm-save">일정 저장하기</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. MEMO TAB -->
+            <section id="tab-memo" class="tab-pane">
+                <div class="memo-container">
+                    <div class="memo-header">
+                        <h2>강의별 메모 & 준비물 관리</h2>
+                        <div class="search-box">
+                            <input type="text" id="memo-search-input" placeholder="강의명 또는 장소 검색...">
+                        </div>
+                    </div>
+                    <div class="memo-cards-grid" id="memo-cards-list">
+                        <!-- JS populated -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. SETTINGS TAB -->
+            <section id="tab-settings" class="tab-pane">
+                <div class="settings-container">
+                    <h2>설정 및 데이터 관리</h2>
+                    <p class="settings-desc">외부 서버나 다른 캘린더와 연동되지 않으며, 모든 데이터는 이 기기(브라우저)에만 안전하게 보관됩니다.</p>
+                    
+                    <div class="settings-card-group">
+                        <!-- Backup & Restore -->
+                        <div class="settings-card">
+                            <h3>데이터 백업 및 복원</h3>
+                            <p>기기를 변경하거나 브라우저 쿠키를 삭제하기 전에 일정을 파일로 내보내어 안전하게 백업하세요.</p>
+                            <div class="settings-actions">
+                                <button class="btn btn-outline" id="btn-backup-json">일정 백업 (JSON)</button>
+                                <button class="btn btn-outline" id="btn-export-csv">엑셀용 내보내기 (CSV)</button>
+                                <label for="restore-file-input" class="btn btn-outline cursor-pointer">
+                                    백업 파일 불러오기
+                                    <input type="file" id="restore-file-input" accept=".json" class="hidden">
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Sample Load & Reset -->
+                        <div class="settings-card danger">
+                            <h3>데이터 관리 및 초기화</h3>
+                            <p>주의: 전체 데이터를 삭제하면 모든 강의 일정 및 저장된 메모가 영구히 소실됩니다.</p>
+                            <div class="settings-actions">
+                                <button class="btn btn-primary" id="btn-load-sample">샘플 일정 등록하기</button>
+                                <button class="btn btn-danger" id="btn-clear-all">전체 데이터 초기화</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="app-nav-bar">
+            <button class="nav-item active" data-tab="tab-today">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">오늘</span>
+            </button>
+            <button class="nav-item" data-tab="tab-calendar">
+                <span class="nav-icon">📅</span>
+                <span class="nav-label">달력</span>
+            </button>
+            <button class="nav-item" data-tab="tab-input">
+                <span class="nav-icon">✏️</span>
+                <span class="nav-label">입력</span>
+            </button>
+            <button class="nav-item" data-tab="tab-memo">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">메모</span>
+            </button>
+            <button class="nav-item" data-tab="tab-settings">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">설정</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- MODAL 1: Memo Detail Editor Modal -->
+    <div class="modal" id="memo-detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-memo-title">강의 상세 정보 및 메모</h3>
+                <button class="btn-close-modal" id="btn-close-memo-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info-bar">
+                    <span id="modal-memo-datetime">2026-07-15 14:00~16:00</span> | <span id="modal-memo-location">장소</span>
+                    <span class="round-indicator" id="modal-memo-round"></span>
+                </div>
+                
+                <div class="memo-form-grid">
+                    <div class="form-group">
+                        <label>기관명</label>
+                        <input type="text" id="memo-agency" placeholder="예: 평생학습관">
+                    </div>
+                    <div class="form-group">
+                        <label>담당자</label>
+                        <input type="text" id="memo-manager" placeholder="예: 홍길동 팀장">
+                    </div>
+                    <div class="form-group">
+                        <label>연락처</label>
+                        <input type="text" id="memo-contact" placeholder="예: 010-1234-5678">
+                    </div>
+                    <div class="form-group">
+                        <label>상세 장소 (강의실 등)</label>
+                        <input type="text" id="memo-location-detail" placeholder="예: 4층 전산교육장">
+                    </div>
+                    <div class="form-group">
+                        <label>교육생 수</label>
+                        <input type="text" id="memo-student-count" placeholder="예: 15명">
+                    </div>
+                    <div class="form-group">
+                        <label>강의료</label>
+                        <input type="text" id="memo-fee" placeholder="예: 200,000원">
+                    </div>
+                    
+                    <div class="form-group span-2">
+                        <label>강의료 입금 여부</label>
+                        <div class="toggle-buttons">
+                            <button class="btn-toggle active" id="btn-pay-unpaid" data-status="unpaid">입금 전</button>
+                            <button class="btn-toggle" id="btn-pay-paid" data-status="paid">입금 완료</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group span-2">
+                        <label>준비물 체크리스트</label>
+                        <div class="checklist-grid">
+                            <label class="checkbox-container">
+                                <input type="checkbox" class="supply-check" value="노트북">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">노트북</span>
+                            </label>
+                            <label class="checkbox-container">
+                                <input type="checkbox" class="supply-check" value="충전기">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">충전기</span>
+                            </label>
+                            <label class="checkbox-container">
+                                <input type="checkbox" class="supply-check" value="HDMI 젠더">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">HDMI 젠더</span>
+                            </label>
+                            <label class="checkbox-container">
+                                <input type="checkbox" class="supply-check" value="마이크">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">마이크</span>
+                            </label>
+                            <label class="checkbox-container">
+                                <input type="checkbox" class="supply-check" value="출석부">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">출석부</span>
+                            </label>
+                            <label class="checkbox-container">
+                                <input type="checkbox" class="supply-check" value="교재">
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">교재</span>
+                            </label>
+                        </div>
+                        <input type="text" id="memo-supplies-extra" placeholder="기타 준비물 (쉼표로 구분하여 입력)" style="margin-top: 10px;">
+                    </div>
+
+                    <div class="form-group span-2">
+                        <label>기타 메모</label>
+                        <textarea id="memo-note" placeholder="추가 메모 사항을 기입하세요" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="btn-modal-delete-event">일정 삭제</button>
+                <button class="btn btn-primary" id="btn-modal-save-memo">저장 완료</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Recurrence Preview Modal -->
+    <div class="modal" id="recurrence-preview-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>반복 일정 미리보기</h3>
+                <button class="btn-close-modal" id="btn-close-recurrence-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-helper-desc">생성될 일정을 확인하세요. 총 <strong id="preview-total-count" class="text-primary">15</strong>개 일정이 등록됩니다.</p>
+                <div class="recurrence-preview-list" id="recurrence-preview-list">
+                    <!-- JS Populated list of events -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="btn-cancel-recurrence-save">취소</button>
+                <button class="btn btn-primary" id="btn-confirm-recurrence-save">확인 후 전체 저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Recurrence Edit Option Modal -->
+    <div class="modal" id="recurrence-edit-modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3>반복 일정 수정 옵션</h3>
+                <button class="btn-close-modal" id="btn-close-recurrence-edit-modal">&times;</button>
+            </div>
+            <div class="modal-body text-center">
+                <p>수정 대상 범위를 선택해주세요.</p>
+                <div class="vertical-btn-group">
+                    <button class="btn btn-outline btn-block" data-action="single">이 일정만 수정</button>
+                    <button class="btn btn-outline btn-block" data-action="future">이 회차 이후 모두 수정</button>
+                    <button class="btn btn-primary btn-block" data-action="all">전체 반복일정 수정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: Recurrence Delete Option Modal -->
+    <div class="modal" id="recurrence-delete-modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3>반복 일정 삭제 옵션</h3>
+                <button class="btn-close-modal" id="btn-close-recurrence-delete-modal">&times;</button>
+            </div>
+            <div class="modal-body text-center">
+                <p>삭제 대상 범위를 선택해주세요.</p>
+                <div class="vertical-btn-group">
+                    <button class="btn btn-outline btn-block text-danger" data-action="single">이 일정만 삭제</button>
+                    <button class="btn btn-danger btn-block" data-action="all">전체 반복일정 삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: Natural Language Search Result Dialog -->
+    <div class="modal" id="nlp-search-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="nlp-search-query-title">일정 검색 결과</h3>
+                <button class="btn-close-modal" id="btn-close-nlp-search-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="lecture-list" id="nlp-search-results">
+                    <!-- Dynamic search items -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btn-close-nlp-search-ok">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="parser.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
