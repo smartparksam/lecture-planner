@@ -8,10 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------
     // 1. 상태 객체 (State)
     // ----------------------------------------------------
+    const todayObj = new Date();
     const state = {
         currentTab: 'tab-today',
-        currentDate: new Date(2026, 6, 8), // 2026년 7월 8일 기준 (월 인덱스는 0부터 시작하므로 6 = 7월)
-        selectedDateStr: '2026-07-08',     // 선택된 날짜 문자열
+        currentDate: todayObj,                // 현재 기기(스마트폰)의 실제 오늘 날짜 적용
+        selectedDateStr: NLPParser.formatDate(todayObj),     // 선택된 날짜도 실제 오늘 날짜로 초기화
         lectures: [],                      // 전체 강의 일정 배열
         activeLecture: null,               // 상세 수정용 강의 객체
         tempParsedEvents: []               // 반복 일정 등 저장 직전의 대기 일정 목록
