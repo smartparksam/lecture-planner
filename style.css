@@ -449,13 +449,21 @@ body {
 }
 
 /* Calendar Event dot */
+.calendar-dots-container {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+}
+
 .calendar-event-dot {
     width: 5px;
     height: 5px;
     background-color: var(--accent-sky);
     border-radius: 50%;
-    position: absolute;
-    bottom: 4px;
 }
 
 .calendar-day-cell.today .calendar-event-dot {

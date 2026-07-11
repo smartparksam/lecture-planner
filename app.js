@@ -433,12 +433,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 cell.classList.add('active-select');
             }
 
-            // 일정이 있는 날짜인지 검사 -> 도트 띄우기
-            const hasLecture = state.lectures.some(l => l.date === dateStr);
-            if (hasLecture) {
-                const dot = document.createElement('span');
-                dot.className = 'calendar-event-dot';
-                cell.appendChild(dot);
+            // 일정이 있는 날짜인지 검사 -> 개수만큼 도트 띄우기
+            const dayLectures = state.lectures.filter(l => l.date === dateStr);
+            if (dayLectures.length > 0) {
+                const dotsContainer = document.createElement('div');
+                dotsContainer.className = 'calendar-dots-container';
+                
+                // 일정이 3개 이상인 경우 최대 3개까지만 표시하고, 필요시 추가 스타일 적용 가능
+                const displayDotsCount = Math.min(dayLectures.length, 3);
+                for (let dotIdx = 0; dotIdx < displayDotsCount; dotIdx++) {
+                    const dot = document.createElement('span');
+                    dot.className = 'calendar-event-dot';
+                    dotsContainer.appendChild(dot);
+                }
+                cell.appendChild(dotsContainer);
             }
 
             // 클릭 이벤트 바인딩
