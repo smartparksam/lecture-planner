@@ -35,6 +35,30 @@
             </div>
         </header>
 
+        <!-- Top Navigation Bar (Moved from bottom) -->
+        <nav class="app-nav-bar top-nav">
+            <button class="nav-item active" data-tab="tab-today">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">오늘</span>
+            </button>
+            <button class="nav-item" data-tab="tab-calendar">
+                <span class="nav-icon">📅</span>
+                <span class="nav-label">달력</span>
+            </button>
+            <button class="nav-item" data-tab="tab-input">
+                <span class="nav-icon">✏️</span>
+                <span class="nav-label">입력</span>
+            </button>
+            <button class="nav-item" data-tab="tab-memo">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">메모</span>
+            </button>
+            <button class="nav-item" data-tab="tab-settings">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">설정</span>
+            </button>
+        </nav>
+
         <!-- Main Content Area -->
         <main class="app-main-content">
             <!-- 1. TODAY TAB -->
@@ -268,30 +292,6 @@
                 </div>
             </section>
         </main>
-
-        <!-- Bottom Navigation Bar -->
-        <nav class="app-nav-bar">
-            <button class="nav-item active" data-tab="tab-today">
-                <span class="nav-icon">🏠</span>
-                <span class="nav-label">오늘</span>
-            </button>
-            <button class="nav-item" data-tab="tab-calendar">
-                <span class="nav-icon">📅</span>
-                <span class="nav-label">달력</span>
-            </button>
-            <button class="nav-item" data-tab="tab-input">
-                <span class="nav-icon">✏️</span>
-                <span class="nav-label">입력</span>
-            </button>
-            <button class="nav-item" data-tab="tab-memo">
-                <span class="nav-icon">📝</span>
-                <span class="nav-label">메모</span>
-            </button>
-            <button class="nav-item" data-tab="tab-settings">
-                <span class="nav-icon">⚙️</span>
-                <span class="nav-label">설정</span>
-            </button>
-        </nav>
     </div>
 
     <!-- MODAL 1: Memo Detail Editor Modal -->

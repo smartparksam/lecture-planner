@@ -79,10 +79,26 @@ body {
     opacity: 0.85;
 }
 
+/* Top Navigation Bar Layout (Fixed at top) */
+.app-nav-bar.top-nav {
+    position: sticky;
+    top: 55px; /* 헤더 높이에 맞춤 */
+    left: 0;
+    right: 0;
+    height: 72px;
+    background-color: var(--bg-card);
+    border-top: none;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 99;
+}
+
 /* Main Content Area */
 .app-main-content {
     flex: 1;
-    padding: 20px 20px 100px 20px; /* bottom padding space for nav bar */
+    padding: 20px; /* bottom padding removed because nav is at top */
     overflow-y: auto;
 }
 
@@ -889,19 +905,13 @@ body {
     cursor: pointer;
 }
 
-/* Bottom Navigation Bar Layout */
+/* Navigation Bar Layout (Common) */
 .app-nav-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     height: 72px;
     background-color: var(--bg-card);
-    border-top: 1px solid var(--border-light);
     display: flex;
     justify-content: space-around;
     align-items: center;
-    z-index: 100;
 }
 
 .nav-item {
